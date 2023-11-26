@@ -1,3 +1,14 @@
+/**
+ * @file sudoku.c
+ * @brief Sudoku game implementation in C programming
+ *
+ * This program allows the user to play the game of Sudoku. It provides a
+ * command-line interface where the user can input their moves and see the
+ * current state of the Sudoku board. The program creates a random Sudoku board every time
+ *
+ * @date 26-Nov-2023
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
