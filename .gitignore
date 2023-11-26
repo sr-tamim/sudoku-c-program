@@ -1,0 +1,6 @@
+# Ignore all files except .c, .md, .exe, LICENCE and Linux binary files
+*.*
+!*.c
+!*.md
+!*.exe
+!.gitignore
