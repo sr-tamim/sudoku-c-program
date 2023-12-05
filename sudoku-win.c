@@ -42,9 +42,15 @@
 #define MEDIUM_LVL 29   // Number of empty cells for medium level
 #define HARD_LVL 41     // Number of empty cells for hard level
 
-int board[N][N];    // Sudoku board with empty cells
-int solvedBoard[N][N];  // Sudoku board with all cells filled
-int totalEmptyCells = MEDIUM_LVL;   // Number of empty cells
+// Sudoku board structure
+struct sudoku_board {
+    int solved[N][N];   // Sudoku board with all cells filled
+    int unsolved[N][N]; // Sudoku board with empty cells
+    int emptyCells;     // Number of empty cells
+};
+
+struct sudoku_board board;  // Global variable to store the board
+
 
 // Function declarations
 void clearScreen();     // clear the screen
@@ -88,21 +94,20 @@ int main()
         switch (difficultyChoice)
         {
         case 1:
-            totalEmptyCells = EASY_LVL;
+            board.emptyCells = EASY_LVL;
             printf("\nEasy level selected\n\n");
             break;
         case 2:
-            totalEmptyCells = MEDIUM_LVL;
+            board.emptyCells = MEDIUM_LVL;
             printf("\nMedium level selected\n\n");
             break;
         case 3:
-            totalEmptyCells = HARD_LVL;
+            board.emptyCells = HARD_LVL;
             printf("\nHard level selected\n\n");
             break;
         default:
-            totalEmptyCells = MEDIUM_LVL;
+            board.emptyCells = MEDIUM_LVL;
             printf("\nMedium level selected\n\n");
-            break;
         }
 
         resetBoard(); // reset the board
@@ -140,7 +145,7 @@ int main()
             col--;
 
             // check if the cell is already filled
-            if (board[row][col] != 0)
+            if (board.unsolved[row][col] != 0)
             {
                 // if the cell is already filled then ask the user if they want to try again
                 printf("This cell is already filled! Try again? (y/n) ");
@@ -174,7 +179,7 @@ int main()
 
             // check if the value is safe to put in the cell
             if (checkIfSafe(row, col, num))
-                board[row][col] = num; // if safe then put the value in the cell
+                board.unsolved[row][col] = num; // if safe then put the value in the cell
             else
             {
                 // if not safe then ask the user if they want to try again
@@ -248,7 +253,7 @@ bool isAbsentInBox(int rowStart, int colStart, int num)
         for (int j = 0; j < MINI_BOX_SIZE; j++)
         {
             // if the number is found in the box then return false
-            if (board[rowStart + i][colStart + j] == num)
+            if (board.unsolved[rowStart + i][colStart + j] == num)
             {
                 return false;
             }
@@ -263,7 +268,7 @@ bool isAbsentInRow(int i, int num)
     for (int j = 0; j < N; j++)
     {
         // if the number is found in the row then return false
-        if (board[i][j] == num)
+        if (board.unsolved[i][j] == num)
         {
             return false;
         }
@@ -277,7 +282,7 @@ bool isAbsentInCol(int j, int num)
     for (int i = 0; i < N; i++)
     {
         // if the number is found in the column then return false
-        if (board[i][j] == num)
+        if (board.unsolved[i][j] == num)
         {
             return false;
         }
@@ -295,7 +300,7 @@ void fillValues()
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
-            solvedBoard[i][j] = board[i][j];
+            board.solved[i][j] = board.unsolved[i][j];
     }
     addEmptyCells();    // remove the K no. of digits from the board
 }
@@ -323,7 +328,7 @@ void fillBox(int row, int col)
             {
                 num = randomGenerator(N);
             } while (!isAbsentInBox(row, col, num));
-            board[row + i][col + j] = num;
+            board.unsolved[row + i][col + j] = num;
         }
     }
 }
@@ -385,13 +390,13 @@ bool fillRemaining(int i, int j) // i is row and j is column
     {
         if (checkIfSafe(i, j, num)) // check if it is safe to put the number in the cell
         {
-            board[i][j] = num; // put the number in the cell
+            board.unsolved[i][j] = num; // put the number in the cell
 
             if (fillRemaining(i, j + 1)) // fill the remaining cells recursively
             {
                 return true; // board is filled
             }
-            board[i][j] = 0;
+            board.unsolved[i][j] = 0;
         }
     }
     return false; // board is not filled
@@ -400,7 +405,7 @@ bool fillRemaining(int i, int j) // i is row and j is column
 // Remove some digits from the board to create empty cells
 void addEmptyCells()
 {
-    int count = totalEmptyCells;
+    int count = board.emptyCells;
     while (count != 0)
     {
         // Generate a random number between 0 and 80
@@ -413,10 +418,10 @@ void addEmptyCells()
             j = j - 1;
         }
 
-        if (board[i][j] != 0) // if the cell is not empty then remove the number from the cell
+        if (board.unsolved[i][j] != 0) // if the cell is not empty then remove the number from the cell
         {
             count--; // decrement the count
-            board[i][j] = 0; // remove the number from the cell
+            board.unsolved[i][j] = 0; // remove the number from the cell
         }
     }
 }
@@ -451,7 +456,7 @@ void printSudoku()
                 printf("%d | ", i + 1);
             
             // print the cell value
-            printf("%d ", board[i][j]);
+            printf("%d ", board.unsolved[i][j]);
 
             // print a line after every 3 columns
             if ((j + 1) % 3 == 0)
@@ -470,7 +475,7 @@ bool isBoardSolved()
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
-            if (board[i][j] != solvedBoard[i][j])
+            if (board.unsolved[i][j] != board.solved[i][j])
                 return false; // return false if any cell is not equal
     }
     return true; // return true if all cells are equal
@@ -483,6 +488,6 @@ void resetBoard()
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
-            board[i][j] = 0;
+            board.unsolved[i][j] = 0;
     }
 }
