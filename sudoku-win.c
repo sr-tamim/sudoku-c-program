@@ -30,11 +30,11 @@
  * - You can also download the executable file from the releases section of this repository
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include <math.h>
+#include <stdio.h>      // for input and output
+#include <stdlib.h>     // for system function like cls to clear the screen
+#include <stdbool.h>    // for bool data type
+#include <time.h>    // for time function
+#include <math.h>   // for math functions like rand function
 
 #define N 9             // Size of the board
 #define MINI_BOX_SIZE 3 // Size of the mini box 3x3
@@ -72,7 +72,7 @@ void resetBoard();      // reset the board to all 0s
 int main()
 {
     // run the program in a loop until the user wants to exit
-    do
+    while (true)  // run the program in an infinite loop until the user wants to exit
     {
         srand((unsigned int)time(NULL)); // seed the random number generator
 
@@ -178,7 +178,7 @@ int main()
             attempts++; // increment the number of attempts
 
             // check if the value is safe to put in the cell
-            if (checkIfSafe(row, col, num))
+            if (board.solved[row][col] == num)
                 board.unsolved[row][col] = num; // if safe then put the value in the cell
             else
             {
@@ -212,7 +212,7 @@ int main()
             goto askForPlayAgain; // if the user enters an invalid choice then go to askForPlayAgain label
         else
             break; // if the user doesn't want to play again then exit the program
-    } while (true); // run the program in an infinite loop until the user wants to exit
+    }
 
 // exit the program
 exit:
