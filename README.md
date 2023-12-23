@@ -1,5 +1,7 @@
 # Sudoku with C
 
+This program allows the user to play the game of **Sudoku**. It provides a command-line interface where the user can input their moves and see the current state of the Sudoku board. The program creates a **random** Sudoku board every time
+
 ### Difference between Linux and Windows version
 | Linux | Windows |
 | ----- | ------- |
