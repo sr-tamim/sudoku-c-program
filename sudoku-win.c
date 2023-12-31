@@ -10,21 +10,21 @@
  * @version 1.0
  * @authors
  * - SR Tamim <https://sr-tamim.vercel.app>
- * 
+ *
  * @section LICENSE
  * This program is licensed under MIT License. See the LICENSE file in the root of this repository for details.
- * 
+ *
  * @section Dependencies
  * - stdio.h
  * - stdlib.h
  * - stdbool.h
  * - time.h
  * - math.h
- * 
+ *
  * @section NOTES
  * This program is tested on Windows 11 using MinGW compiler
  * The difference between this program and the Linux version is that this program uses system("cls") to clear the screen and in printSudoku() function, it uses ASCII characters to draw the board. The Linux version uses ANSI escape sequences to clear the screen and Unicode (box drawing) characters to draw the board.
- * 
+ *
  * @section Usage
  * - Compile the program using C compiler (gcc, clang, mingw, etc)
  * - Run the executable file
@@ -217,6 +217,8 @@ int main()
 
 // exit the program
 exit:
+    printf("\nPress any key to close the program...");
+    getch();
     return 0; // return 0 to indicate successful execution
 }
 /* =========== End of Main Function =========== */
@@ -455,7 +457,7 @@ void printSudoku()
             // print the row numbers on the left
             if (j == 0)
                 printf("%d | ", i + 1);
-            
+
             // print the cell value
             printf("%d ", board.unsolved[i][j]);
 
