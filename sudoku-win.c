@@ -23,6 +23,7 @@
  * 
  * @section NOTES
  * This program is tested on Windows 11 using MinGW compiler
+ * The difference between this program and the Linux version is that this program uses system("cls") to clear the screen and in printSudoku() function, it uses ASCII characters to draw the board. The Linux version uses ANSI escape sequences to clear the screen and Unicode (box drawing) characters to draw the board.
  * 
  * @section Usage
  * - Compile the program using C compiler (gcc, clang, mingw, etc)
